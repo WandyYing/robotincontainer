@@ -24,6 +24,22 @@ ENV HEIGHT=720
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
+
+# Install ImageMagick
+RUN echo "deb-src http://mirrors.163.com/ubuntu/ bionic main restricted" | tee /etc/apt/sources.list.d/trusty-copies.list && \
+    apt update && \
+    # apt upgrade -y && \
+    apt build-dep -y imagemagick && \
+    wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
+    tar xf ImageMagick.tar.gz && \
+    cd ImageMagick-7* && \
+    ./configure && \
+    make && \
+    make install && \
+    make clean && \
+    ldconfig /usr/local/lib && \
+    rm /etc/apt/sources.list.d/trusty-copies.list
+
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
 #########################################
