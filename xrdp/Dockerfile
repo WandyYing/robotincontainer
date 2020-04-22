@@ -24,10 +24,10 @@ ENV HEIGHT=720
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-
 # Install ImageMagick
 RUN echo "deb-src http://mirrors.163.com/ubuntu/ bionic main restricted" | tee /etc/apt/sources.list.d/trusty-copies.list && \
     apt update && \
+    apt-get install -y wget \
     # apt upgrade -y && \
     apt build-dep -y imagemagick && \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
@@ -50,8 +50,7 @@ RUN echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' 
 
     export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
-    apt-get install -y ImageMagick \
-                       build-essential \
+    apt-get install -y build-essential \
                        python \
                        python-dev \
                        python-wxgtk2.8 \
@@ -61,6 +60,9 @@ RUN echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' 
                        bash \
                        firefox \
                        git
+
+
+
 
 #安装中文语言包
 RUN sudo apt-get install -y language-pack-gnome-zh-hans
