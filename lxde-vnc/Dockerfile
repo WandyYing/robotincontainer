@@ -22,7 +22,7 @@ RUN apt-get update && \
                        language-pack-gnome-zh-hans  \
                        ttf-wqy-zenhei
 
-RUN python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk2/centos-7/wxPython-4.0.7.post2-cp36-cp36m-linux_x86_64.whl
+# RUN python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk2/centos-7/wxPython-4.0.7.post2-cp36-cp36m-linux_x86_64.whl
 
 #安装中文语言包
 RUN sudo apt-get install -y language-pack-gnome-zh-hans && \
