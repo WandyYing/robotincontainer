@@ -24,20 +24,20 @@ ENV HEIGHT=720
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
-# Install ImageMagick
-RUN apt update && \
-    apt-get install -y wget \
-    # apt upgrade -y && \
-    apt build-dep -y imagemagick && \
-    wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
-    tar xf ImageMagick.tar.gz && \
-    cd ImageMagick-7* && \
-    ./configure && \
-    make && \
-    make install && \
-    make clean && \
-    ldconfig /usr/local/lib && \
-    rm /etc/apt/sources.list.d/trusty-copies.list
+# # Install ImageMagick
+# RUN apt update && \
+#     apt-get install -y wget \
+#     # apt upgrade -y && \
+#     apt build-dep -y imagemagick && \
+#     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
+#     tar xf ImageMagick.tar.gz && \
+#     cd ImageMagick-7* && \
+#     ./configure && \
+#     make && \
+#     make install && \
+#     make clean && \
+#     ldconfig /usr/local/lib && \
+#     rm /etc/apt/sources.list.d/trusty-copies.list
 
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
@@ -49,7 +49,8 @@ RUN echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' 
 
     export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
-    apt-get install -y build-essential \
+    apt-get install -y imagemagick \
+                       build-essential \
                        python \
                        python-dev \
                        python-wxgtk2.8 \
