@@ -25,7 +25,7 @@ ENV HEIGHT=720
 CMD ["/sbin/my_init"]
 
 # Install ImageMagick
-RUN echo "deb-src http://mirrors.163.com/ubuntu/ bionic main restricted" | tee /etc/apt/sources.list.d/trusty-copies.list && \
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu bionic main restricted" | tee /etc/apt/sources.list.d/trusty-copies.list && \
     apt update && \
     apt-get install -y wget \
     # apt upgrade -y && \
