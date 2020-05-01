@@ -140,6 +140,8 @@ RUN pip3 install --upgrade pip && \
 # RUN git clone  -b release/1.7.4.2 https://github.com/robotframework/RIDE.git /nobody/RIDE && \
 #     mkdir -p /etc/my_init.d && \
 #     echo 'admin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN mkdir -p /etc/my_init.d && \
+    echo 'admin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 WORKDIR /nobody/RIDE
 # RUN /usr/bin/python setup.py install
 ADD firstrun.sh /etc/my_init.d/firstrun.sh
