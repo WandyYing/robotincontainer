@@ -102,32 +102,34 @@ ENV LANG=zh_CN.UTF-8
 RUN echo "Asia/shanghai" > /etc/timezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
-
+# Change PIP source
+# RUN mkdir ~/.pip && \
+#     touch ~/.pip.conf && \
+#     echo "[global]" >> ~/.pip/pip.conf && \
+#     echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple/ " >> ~/.pip/pip.conf && \
+#     echo "[install]" >> ~/.pip/pip.conf && \
+#     echo "trusted-host = pypi.tuna.tsinghua.edu.cn" >> ~/.pip/pip.conf
 #########################################
 ##          Install app components     ##
 #########################################
 RUN pip3 install --upgrade pip && \
+    pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython==4.1.0 && \
     pip3 install -U paramiko \
                     robotframework \
                     selenium \
-                    robotframework-seleniumlibrary && \
-    pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
-    
-# RUN pip3 install wxpython && \
-# RUN pip3 install -U robotframework \
-#                     selenium \
-#                     robotframework-seleniumlibrary
+                    robotframework-seleniumlibrary \
+                    robotframework-ride==1.7.4.2
 
 #########################################
 ##          GUI APP INSTALL            ##
 #########################################
 
-WORKDIR /nobody
-RUN git clone  -b release/1.7.4.2 https://github.com/robotframework/RIDE.git /nobody/RIDE && \
-    mkdir -p /etc/my_init.d && \
-    echo 'admin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# WORKDIR /nobody
+# RUN git clone  -b release/1.7.4.2 https://github.com/robotframework/RIDE.git /nobody/RIDE && \
+#     mkdir -p /etc/my_init.d && \
+#     echo 'admin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 WORKDIR /nobody/RIDE
-RUN /usr/bin/python setup.py install
+# RUN /usr/bin/python setup.py install
 ADD firstrun.sh /etc/my_init.d/firstrun.sh
 RUN chmod +x /etc/my_init.d/firstrun.sh
 
