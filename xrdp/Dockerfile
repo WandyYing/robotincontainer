@@ -26,7 +26,7 @@ CMD ["/sbin/my_init"]
 
 # Install ImageMagick
 RUN apt-get update && \
-    apt-get install -y wget \
+    apt-get install -y wget && \
     # apt upgrade -y && \
     apt-get build-dep -y imagemagick && \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
