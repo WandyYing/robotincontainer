@@ -1,6 +1,6 @@
 FROM yingjun/dockergui:latest
 
-MAINTAINER Diego<wandy1208@gmail.com>
+MAINTAINER YingJun<wandy1208@gmail.com>
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
@@ -24,9 +24,67 @@ ENV HEIGHT=720
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
+# Install ImageMagick
+RUN apt update && \
+    apt-get install -y wget \
+    # apt upgrade -y && \
+    apt build-dep -y imagemagick && \
+    wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
+    tar xf ImageMagick.tar.gz && \
+    cd ImageMagick-7* && \
+    ./configure && \
+    make && \
+    make install && \
+    make clean && \
+    ldconfig /usr/local/lib && \
+    rm /etc/apt/sources.list.d/trusty-copies.list
+
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.copy
+
+# RUN echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' >> /etc/apt/sources.list && \
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list && \
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list && \ 
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list && \ 
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse' >> /etc/apt/sources.list
+
+## 
+RUN apt-get install -y python3-pip \
+                    curl \
+                    bash \
+                    git
+                    # libsdl2-mixer-2.0-0 \
+                    # libsdl2-image-2.0-0 \
+                    # libsdl2-2.0-0 && \
+    # pip3 install robotframework-ride
+
+
+
+
+#########################################
+##    REPOSITORIES AND DEPENDENCIES    ##
+#########################################
+# RUN echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' > /etc/apt/sources.list && \
+#     echo 'deb http://archive.ubuntu.com/ubuntu trusty-updates main universe restricted' >> /etc/apt/sources.list && \
+
+# Install packages needed for app
+
+# RUN export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
+#     apt-get update && \
+#     apt-get install -y build-essential \
+#                        python3 \
+#                     #    python3-dev \
+#                        python3-pip \
+#                     #    python3-lxml \
+#                        curl \
+#                        bash \
+#                        firefox \
+#                        git \
+#                        wget
+
 # # Install ImageMagick
-# RUN apt update && \
-#     apt-get install -y wget \
+# RUN echo "deb-src http://mirrors.163.com/ubuntu/ bionic main restricted" | tee /etc/apt/sources.list.d/trusty-copies.list && \
+#     apt update && \
 #     # apt upgrade -y && \
 #     apt build-dep -y imagemagick && \
 #     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
@@ -39,34 +97,11 @@ CMD ["/sbin/my_init"]
 #     ldconfig /usr/local/lib && \
 #     rm /etc/apt/sources.list.d/trusty-copies.list
 
-#########################################
-##    REPOSITORIES AND DEPENDENCIES    ##
-#########################################
-RUN echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' > /etc/apt/sources.list && \
-    echo 'deb http://archive.ubuntu.com/ubuntu trusty-updates main universe restricted' >> /etc/apt/sources.list && \
-
-# Install packages needed for app
-
-    export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
-    apt-get update && \
-    apt-get install -y imagemagick \
-                       build-essential \
-                       python \
-                       python-dev \
-                       python-wxgtk2.8 \
-                       python-pip \
-                       python-lxml \
-                       curl \
-                       bash \
-                       firefox \
-                       git
-
-
-
+# RUN python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk2/centos-7/wxPython-4.0.7.post2-cp36-cp36m-linux_x86_64.whl
 
 #安装中文语言包
-RUN sudo apt-get install -y language-pack-gnome-zh-hans
-RUN sudo apt-get install -y ttf-wqy-zenhei
+RUN sudo apt-get install -y language-pack-gnome-zh-hans && \
+    sudo apt-get install -y ttf-wqy-zenhei
 
 # 处理中文问题
 ENV LANG=zh_CN.UTF-8
@@ -75,47 +110,25 @@ ENV LANG=zh_CN.UTF-8
 RUN echo "Asia/shanghai" > /etc/timezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
+
 #########################################
 ##          Install app components     ##
 #########################################
-RUN pip install --upgrade pip
-RUN pip install wxpython && \
-    pip install -U robotframework \
-                   selenium \
-                   robotframework-seleniumlibrary \
-                   robotframework-ftplibrary \
-		   robotframework-requests \
-                   invoke \
-                   docutils \
-                   Pygments \
-                   pyyaml \
-                   robotframework-databaselibrary \
-                   robotframework-httplibrary \
-                   robotframework-anywherelibrary \
-                   https://github.com/bulkan/robotframework-difflibrary/archive/master.zip \
-		   https://github.com/JMcn/robotframework-appiumlibrary/archive/v1.4.3.1.zip \
-                   robotframework-faker \
-                   Paver \
-                   robotframework-rfdoc \
-                   robotframework-selenium2screenshots \
-                   robotframework-hub \
-                   robotframework-lint \
-                   robotframework-pageobjects \
-                   robotframework-pycurllibrary \
-                   sphinxcontrib-robotframework \
-                   jedi \
-                   pep8 \
-                   pylint \
-                   pyflakes \
-                   requests \
-                   rope
+RUN pip3 install --upgrade pip && \
+    pip3 install paramiko robotframework && \
+    pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
+    
+# RUN pip3 install wxpython && \
+# RUN pip3 install -U robotframework \
+#                     selenium \
+#                     robotframework-seleniumlibrary
 
 #########################################
 ##          GUI APP INSTALL            ##
 #########################################
 
 WORKDIR /nobody
-RUN git clone -b release/1.7.4.1 https://github.com/robotframework/RIDE.git /nobody/RIDE && \
+RUN git clone  -b release/1.7.4.2 https://github.com/robotframework/RIDE.git /nobody/RIDE && \
     mkdir -p /etc/my_init.d && \
     echo 'admin ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 WORKDIR /nobody/RIDE
