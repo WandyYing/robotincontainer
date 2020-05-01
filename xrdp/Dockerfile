@@ -24,9 +24,32 @@ ENV HEIGHT=720
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
+# Change source to tsinghua
+# RUN mv /etc/apt/sources.list /etc/apt/sources.list.copy
+
+# RUN echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' >> /etc/apt/sources.list && \
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list && \
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list && \ 
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list && \ 
+#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse' >> /etc/apt/sources.list
+
+# Install packages needed for app
+RUN export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get install -y python3-pip \
+                    curl \
+                    wget \
+                    bash \
+                    git \
+                    firefox
+                    # libsdl2-mixer-2.0-0 \
+                    # libsdl2-image-2.0-0 \
+                    # libsdl2-2.0-0 && \
+    # pip3 install robotframework-ride
+
+
 # Install ImageMagick
 RUN apt-get update && \
-    apt-get install -y wget && \
     # apt upgrade -y && \
     apt-get build-dep -y imagemagick && \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
@@ -36,30 +59,8 @@ RUN apt-get update && \
     make && \
     make install && \
     make clean && \
-    ldconfig /usr/local/lib && \
-    rm /etc/apt/sources.list.d/trusty-copies.list
-
-
-RUN mv /etc/apt/sources.list /etc/apt/sources.list.copy
-
-# RUN echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' >> /etc/apt/sources.list && \
-#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list && \
-#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list && \ 
-#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list && \ 
-#     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse' >> /etc/apt/sources.list
-
-## 
-RUN apt-get install -y python3-pip \
-                    curl \
-                    bash \
-                    git
-                    # libsdl2-mixer-2.0-0 \
-                    # libsdl2-image-2.0-0 \
-                    # libsdl2-2.0-0 && \
-    # pip3 install robotframework-ride
-
-
-
+    ldconfig /usr/local/lib
+    # rm /etc/apt/sources.list.d/trusty-copies.list
 
 #########################################
 ##    REPOSITORIES AND DEPENDENCIES    ##
@@ -82,22 +83,6 @@ RUN apt-get install -y python3-pip \
 #                        git \
 #                        wget
 
-# # Install ImageMagick
-# RUN echo "deb-src http://mirrors.163.com/ubuntu/ bionic main restricted" | tee /etc/apt/sources.list.d/trusty-copies.list && \
-#     apt update && \
-#     # apt upgrade -y && \
-#     apt build-dep -y imagemagick && \
-#     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
-#     tar xf ImageMagick.tar.gz && \
-#     cd ImageMagick-7* && \
-#     ./configure && \
-#     make && \
-#     make install && \
-#     make clean && \
-#     ldconfig /usr/local/lib && \
-#     rm /etc/apt/sources.list.d/trusty-copies.list
-
-# RUN python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk2/centos-7/wxPython-4.0.7.post2-cp36-cp36m-linux_x86_64.whl
 
 #安装中文语言包
 RUN sudo apt-get install -y language-pack-gnome-zh-hans && \
@@ -115,7 +100,10 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ##          Install app components     ##
 #########################################
 RUN pip3 install --upgrade pip && \
-    pip3 install paramiko robotframework && \
+    pip3 install -U paramiko \
+                    robotframework \
+                    selenium \
+                    robotframework-seleniumlibrary && \
     pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
     
 # RUN pip3 install wxpython && \
