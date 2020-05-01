@@ -48,11 +48,12 @@ RUN export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
                     wget \
                     bash \
                     git \
-                    firefox
+                    firefox \
                     # libsdl2-mixer-2.0-0 \
                     # libsdl2-image-2.0-0 \
                     # libsdl2-2.0-0 && \
     # pip3 install robotframework-ride
+    && rm -rf /var/lib/apt/lists/*
 
 
 # Install ImageMagick
@@ -66,7 +67,8 @@ RUN apt-get update && \
     make && \
     make install && \
     make clean && \
-    ldconfig /usr/local/lib
+    ldconfig /usr/local/lib && \
+    rm -rf /var/lib/apt/lists/*
     # rm /etc/apt/sources.list.d/trusty-copies.list
 
 #########################################
@@ -92,8 +94,10 @@ RUN apt-get update && \
 
 
 #安装中文语言包
-RUN apt-get install -y language-pack-gnome-zh-hans && \
-    apt-get install -y ttf-wqy-zenhei
+RUN apt-get update && \
+    apt-get install -y language-pack-gnome-zh-hans && \
+    apt-get install -y ttf-wqy-zenhei && \
+    rm -rf /var/lib/apt/lists/*
 
 # 处理中文问题
 ENV LANG=zh_CN.UTF-8
@@ -105,8 +109,9 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 #########################################
 ##          Install GTK+ 3.0           ##
 #########################################
-RUN apt-get install -y libgtk-3-dev && \
-    apt-get install -y build-essential pkg-config devhelp glade libglade2-dev
+# RUN apt-get update && \
+#     apt-get install -y libgtk-3-dev && \
+#     apt-get install -y build-essential pkg-config devhelp glade libglade2-dev
 
 # Change PIP source
 # RUN mkdir ~/.pip && \
@@ -119,9 +124,9 @@ RUN apt-get install -y libgtk-3-dev && \
 ##          Install app components     ##
 #########################################
 RUN pip3 install --upgrade pip && \
-    # pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython==4.1.0 && \
+    pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython==4.1.0 && \
     pip3 install -U paramiko \
-                    wxPython==4.1.0 \
+                    # wxPython==4.1.0 \
                     robotframework \
                     selenium \
                     robotframework-seleniumlibrary \
