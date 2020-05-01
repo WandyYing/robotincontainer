@@ -25,10 +25,10 @@ ENV HEIGHT=720
 CMD ["/sbin/my_init"]
 
 # Install ImageMagick
-RUN apt update && \
+RUN apt-get update && \
     apt-get install -y wget \
     # apt upgrade -y && \
-    apt build-dep -y imagemagick && \
+    apt-get build-dep -y imagemagick && \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
     tar xf ImageMagick.tar.gz && \
     cd ImageMagick-7* && \
