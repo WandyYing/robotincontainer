@@ -20,18 +20,22 @@ RUN apt-get update && \
                        fcitx-module-cloudpinyin \
                        fcitx-sunpinyin \
                        language-pack-gnome-zh-hans  \
-                       ttf-wqy-zenhei
-
+                       ttf-wqy-zenhei \
+    && rm -rf /var/lib/apt/lists/*
 # RUN python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk2/centos-7/wxPython-4.0.7.post2-cp36-cp36m-linux_x86_64.whl
 
-#安装中文语言包
-RUN apt-get update && \
-    apt-get install -y language-pack-gnome-zh-hans && \
-    apt-get install -y ttf-wqy-zenhei && \
-    rm -rf /var/lib/apt/lists/*
+# #安装中文语言包
+# RUN apt-get update && \
+#     apt-get install -y language-pack-gnome-zh-hans && \
+#     apt-get install -y ttf-wqy-zenhei && \
+#     rm -rf /var/lib/apt/lists/*
+RUN ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib && \
+    ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib && \
+    ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib
 
 # 处理中文问题
 ENV LANG=zh_CN.UTF-8
+ENV LANGUAGE=zh_CN.UTF-8
 
 # 处理时区问题
 RUN echo "Asia/shanghai" > /etc/timezone
