@@ -25,8 +25,10 @@ RUN apt-get update && \
 # RUN python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk2/centos-7/wxPython-4.0.7.post2-cp36-cp36m-linux_x86_64.whl
 
 #安装中文语言包
-RUN sudo apt-get install -y language-pack-gnome-zh-hans && \
-    sudo apt-get install -y ttf-wqy-zenhei
+RUN apt-get update && \
+    apt-get install -y language-pack-gnome-zh-hans && \
+    apt-get install -y ttf-wqy-zenhei && \
+    rm -rf /var/lib/apt/lists/*
 
 # 处理中文问题
 ENV LANG=zh_CN.UTF-8
@@ -39,7 +41,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 #########################################
 ##          Install app components     ##
 #########################################
-RUN pip3 install --upgrade pip3 && \
+RUN pip3 install --upgrade pip && \
 # RUN pip3 install wxpython && \
     pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython==4.1.0 && \
     pip3 install -U robotframework \
