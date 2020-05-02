@@ -22,7 +22,7 @@ ENV WIDTH=1280
 ENV HEIGHT=720
 
 # Use baseimage-docker's init system
-CMD ["/sbin/my_init"]
+# CMD ["/sbin/my_init"]
 
 # Change source to tsinghua
 # RUN mv /etc/apt/sources.list /etc/apt/sources.list.copy
@@ -41,7 +41,7 @@ CMD ["/sbin/my_init"]
 
 # Install packages needed for app
 RUN export DEBCONF_NONINTERACTIVE_SEEN=true DEBIAN_FRONTEND=noninteractive && \
-    apt-get update && \
+    apt-get update --fix-missing && \
     apt-get install -y build-essential\
                     python3-pip \
                     curl \
