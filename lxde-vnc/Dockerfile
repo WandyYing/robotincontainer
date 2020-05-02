@@ -39,12 +39,14 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 #########################################
 ##          Install app components     ##
 #########################################
-RUN pip3 install --upgrade pip3
-RUN pip3 install wxpython && \
+RUN pip3 install --upgrade pip3 && \
+# RUN pip3 install wxpython && \
+    pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython==4.1.0 && \
     pip3 install -U robotframework \
                     selenium \
                     robotframework-seleniumlibrary \
-                    https://github.com/robotframework/RIDE/archive/master.zip
+                    robotframework-ride==1.7.4.2
+                    # https://github.com/robotframework/RIDE/archive/master.zip
 
 
 COPY startapp.sh /startapp.sh
